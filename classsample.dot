@@ -1,0 +1,52 @@
+digraph G {
+
+//    fontname = "Courier New"
+    //fontsize = 8
+
+    node [
+            //fontname = "Courier New"
+            //fontsize = 8
+            shape = "record"
+            style=filled
+            fillcolor=gray95
+    ]
+
+    edge [
+            //fontname = "Courier New"
+            //fontsize = 8
+            arrowtail = "empty"
+            arrowhead = "empty"
+            dir = back
+    ]
+    ServiceHandler [
+            label = "{ServiceHandler||+ Init(string config)\l+ GetNaviGuide(config,response,request)}"
+    ]
+
+    RgWrapper [            label = "{RgWrapper||+ GenerateInfo(config,datacontainer,vecEvent)}"    ]
+
+    EventFactory [            label = "{EventFactory||+ virtual GenerateEvents(config,datacontainer,vecEvent)=0}"    ]
+    {rank=same;EventFactoryBase;RouteGuideEventFactory}
+    EventFactoryBase[label = "{EventFactoryBase|+ GuidanceDataContainer\l+ GuidanceConfig\l|+ virtual GenerateEvents(config,response,request)\l+ virtual GetProcessorCnt()=0\l+ virtual GetProcessorName()=0\l+ virtual GetProcessor()=0\l}"]
+    RouteGuideEventFactory[label = "{RouteGuideEventFactory||+ virtual GenerateEvents()\l}"]
+    EventFactoryBehavior[label = "{EventFactoryBehavior||+ virtual GetProcessorCnt()\l+ virtual GetProcessorName()\l+ virtual GetProcessor()\l}"]
+    EventFactoryDisplay[label = "{EventFactoryDisplay||+ virtual GenerateEvents()\l+ virtual GetProcessorCnt()\l+ virtual GetProcessorName()\l+ virtual GetProcessor()\l}"]
+    EventFactoryVoice[label = "{EventFactoryVoice|+ Intersection\l+ Camera\l+ NavigationStart\l|+ virtual GenerateEvents()\l+ virtual GetProcessorCnt()\l+ virtual GetProcessorName()\l+ virtual GetProcessor()\l}"]
+    
+    ServiceHandler->RgWrapper[style=invis];
+    
+    EventFactory->RouteGuideEventFactory;
+    EventFactory->EventFactoryBase;
+    EventFactoryBase->EventFactoryBehavior;
+    EventFactoryBase->EventFactoryDisplay;
+    EventFactoryBase->EventFactoryVoice;
+    EventFactoryBase->RouteGuideEventFactory[arrowtail=odiamond,label="3:1"];
+    
+    Processor[label = "{Processor||+ virtual GenerateEvents()=0\l}"]
+    Intersection[label = "{Intersection||+ virtual GenerateEvents()\l}"]
+    Camera[label = "{Camera||+ virtual GenerateEvents()\l}"]
+    NavigationStart[label = "{NavigationStart||+ virtual GenerateEvents()\l}"]
+    
+    Processor->Intersection;
+    Processor->Camera;
+    Processor->NavigationStart;
+}
